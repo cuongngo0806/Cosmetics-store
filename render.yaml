@@ -30,3 +30,6 @@ services:
         sync: false
       - key: SEED_DEMO_PASSWORD
         sync: false
+      # Neon pooler (PgBouncer) can leak Prisma's migrate advisory lock; safe with one instance.
+      - key: PRISMA_SCHEMA_DISABLE_ADVISORY_LOCK
+        value: "1"

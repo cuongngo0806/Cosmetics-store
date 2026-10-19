@@ -14,9 +14,9 @@ Redis không bắt buộc khi Render chỉ chạy một API instance.
 | Thành phần | Nơi chạy/lưu trữ | Tên hoặc địa chỉ hiện tại | Nơi quản lý |
 | --- | --- | --- | --- |
 | Mã nguồn | GitHub | `cuongngo0806/Cosmetics-store`, nhánh `main` | [GitHub](https://github.com/cuongngo0806/Cosmetics-store) |
-| Giao diện web | Vercel | [https://glowbeauty.vercel.app](https://glowbeauty.vercel.app) | [Vercel Dashboard](https://vercel.com/dashboard) |
+| Giao diện web | Vercel | Project `glowbeauty`, [https://glowbeauty-topaz.vercel.app](https://glowbeauty-topaz.vercel.app) | [Vercel Dashboard](https://vercel.com/dashboard) |
 | Backend/API và Socket.IO | Render | `glowbeauty-api`, [health check](https://glowbeauty-api.onrender.com/api/health) | [Render Dashboard](https://dashboard.render.com) |
-| PostgreSQL | Neon | Project `GlowBeauty`, database `neondb` | [Neon Console](https://console.neon.tech) |
+| PostgreSQL | Neon | Project `GlowBeauty` (Singapore), database `neondb` | [Neon Console](https://console.neon.tech) |
 | Ảnh tải lên | Cloudinary | Ảnh đại diện và ảnh sản phẩm | [Cloudinary Console](https://console.cloudinary.com) |
 
 Máy tính cá nhân **không phải máy chủ production**. Sau khi code đã được push lên GitHub và deploy thành công, có thể tắt máy tính mà website vẫn hoạt động. GitHub chỉ lưu mã nguồn và kích hoạt auto-deploy; request của người dùng được Vercel và Render xử lý, còn dữ liệu nằm trên Neon và Cloudinary.
@@ -25,7 +25,7 @@ Luồng một request production:
 
 ```text
 Trình duyệt
-  -> Vercel (Next.js, glowbeauty.vercel.app)
+  -> Vercel (Next.js, glowbeauty-topaz.vercel.app)
   -> /api được chuyển tiếp tới Render (NestJS)
   -> Render đọc/ghi PostgreSQL trên Neon
   -> Render tải và đọc ảnh trên Cloudinary
@@ -278,6 +278,10 @@ Kiểm tra thật kỹ connection string trước khi chạy. Không dùng lện
 
 - Kiểm tra file đã được commit và push lên GitHub.
 - Kiểm tra Blueprint đang chọn đúng repository và nhánh `main`.
+
+### Render báo `P1002` / timeout advisory lock khi migrate
+
+Prisma giữ advisory lock khi chạy `migrate deploy`; qua pooler của Neon lock có thể bị kẹt. Đặt `PRISMA_SCHEMA_DISABLE_ADVISORY_LOCK=1` trên Render (đã có trong `render.yaml`, an toàn khi chỉ chạy một instance) rồi deploy lại.
 
 ### Render báo lỗi kết nối database
 
