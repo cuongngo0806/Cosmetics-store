@@ -17,23 +17,30 @@ export class AuthService {
   private normalizeEmail(email: string) { return email.trim().toLowerCase(); }
   private hashToken(token: string) { return createHash('sha256').update(token).digest('hex'); }
 
+  private customerCode() { return `KH${Date.now().toString(36).toUpperCase()}${randomBytes(2).toString('hex').toUpperCase()}`; }
+
   async registerStudent(dto: RegisterStudentDto) {
     if (dto.password !== dto.confirmPassword) throw new ApiError(HttpStatus.BAD_REQUEST, 'PASSWORD_CONFIRMATION_MISMATCH', 'Mật khẩu xác nhận không khớp.');
     const email = this.normalizeEmail(dto.email);
-    const directory = await this.prisma.studentDirectory.findUnique({ where: { schoolEmail: email }, include: { studentProfile: true } });
-    if (!directory) throw new ApiError(HttpStatus.BAD_REQUEST, 'STUDENT_EMAIL_NOT_FOUND', 'Email này không tồn tại trong hệ thống sinh viên.');
-    if (directory.status !== StudentDirectoryStatus.ACTIVE) throw new ApiError(HttpStatus.FORBIDDEN, 'STUDENT_NOT_ELIGIBLE', 'Hồ sơ sinh viên hiện không đủ điều kiện đăng ký.');
-    if (directory.studentProfile || await this.prisma.user.findUnique({ where: { email } })) throw new ApiError(HttpStatus.CONFLICT, 'STUDENT_ALREADY_REGISTERED', 'Sinh viên này đã có tài khoản CanteenPN.');
+    const fullName = dto.fullName.trim().replace(/\s+/g, ' ');
+    if (fullName.length < 2) throw new ApiError(HttpStatus.BAD_REQUEST, 'FULL_NAME_REQUIRED', 'Vui lòng nhập họ tên.');
+    if (await this.prisma.user.findUnique({ where: { email } })) throw new ApiError(HttpStatus.CONFLICT, 'STUDENT_ALREADY_REGISTERED', 'Email này đã được dùng để đăng ký tài khoản GlowBeauty.');
     const passwordHash = await argon2.hash(dto.password);
     try {
       const user = await this.prisma.$transaction(async tx => {
+        const existing = await tx.studentDirectory.findUnique({ where: { schoolEmail: email }, include: { studentProfile: true } });
+        if (existing?.studentProfile) throw new ApiError(HttpStatus.CONFLICT, 'STUDENT_ALREADY_REGISTERED', 'Email này đã được dùng để đăng ký tài khoản GlowBeauty.');
+        if (existing && existing.status !== StudentDirectoryStatus.ACTIVE) throw new ApiError(HttpStatus.FORBIDDEN, 'STUDENT_NOT_ELIGIBLE', 'Email này hiện không thể dùng để đăng ký.');
+        const directory = existing
+          ? await tx.studentDirectory.update({ where: { id: existing.id }, data: { fullName } })
+          : await tx.studentDirectory.create({ data: { studentCode: this.customerCode(), schoolEmail: email, fullName, faculty: 'Thành viên mới', major: 'Chưa cập nhật', className: 'Chưa cập nhật', academicYear: String(new Date().getFullYear()), status: StudentDirectoryStatus.ACTIVE } });
         const created = await tx.user.create({ data: { email, passwordHash, role: Role.STUDENT, status: UserStatus.ACTIVE, avatarUrl: DEFAULT_AVATAR } });
         await tx.studentProfile.create({ data: { userId: created.id, studentDirectoryId: directory.id, wallet: { create: { balance: 0 } }, loyaltyAccount: { create: { points: 0 } }, cart: { create: {} } } });
         return created;
       }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
-      return this.issueSession(user.id, user.email, user.role, directory.fullName);
+      return this.issueSession(user.id, user.email, user.role, fullName);
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') throw new ApiError(HttpStatus.CONFLICT, 'STUDENT_ALREADY_REGISTERED', 'Sinh viên này đã có tài khoản CanteenPN.');
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') throw new ApiError(HttpStatus.CONFLICT, 'STUDENT_ALREADY_REGISTERED', 'Email này đã được dùng để đăng ký tài khoản GlowBeauty.');
       throw error;
     }
   }

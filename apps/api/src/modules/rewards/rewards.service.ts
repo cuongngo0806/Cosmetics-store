@@ -7,7 +7,7 @@ import { PrismaService } from '../../prisma.service';
 @Injectable()
 export class RewardsService {
   constructor(private readonly prisma: PrismaService) {}
-  private async profile(userId: string) { const profile = await this.prisma.studentProfile.findUnique({ where: { userId } }); if (!profile) throw new ApiError(HttpStatus.FORBIDDEN, 'STUDENT_PROFILE_REQUIRED', 'Chỉ sinh viên mới có điểm thưởng.'); return profile; }
+  private async profile(userId: string) { const profile = await this.prisma.studentProfile.findUnique({ where: { userId } }); if (!profile) throw new ApiError(HttpStatus.FORBIDDEN, 'STUDENT_PROFILE_REQUIRED', 'Chỉ khách hàng mới có điểm thưởng.'); return profile; }
   async loyalty(userId: string) { const profile = await this.profile(userId); return this.prisma.loyaltyAccount.findUniqueOrThrow({ where: { studentProfileId: profile.id }, include: { transactions: { orderBy: { createdAt: 'desc' }, take: 100 } } }); }
   coupons() { const now = new Date(); return this.prisma.coupon.findMany({ where: { isActive: true, startAt: { lte: now }, expireAt: { gte: now } }, orderBy: { expireAt: 'asc' } }); }
   vouchers() { const now = new Date(); return this.prisma.voucher.findMany({ where: { isActive: true, startAt: { lte: now }, expireAt: { gte: now }, remainingQuantity: { gt: 0 } }, orderBy: { requiredPoints: 'asc' } }); }

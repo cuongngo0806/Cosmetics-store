@@ -19,7 +19,7 @@ export class ProductQueryDto {
 export class CreateCategoryDto {
   @ApiProperty() @IsString() name!: string;
   @ApiProperty() @IsString() slug!: string;
-  @ApiPropertyOptional({ default: '🍽️' }) @IsOptional() @IsString() icon?: string;
+  @ApiPropertyOptional({ default: '💄' }) @IsOptional() @IsString() icon?: string;
   @ApiPropertyOptional() @IsOptional() @Type(() => Number) @IsInt() sortOrder?: number;
 }
 

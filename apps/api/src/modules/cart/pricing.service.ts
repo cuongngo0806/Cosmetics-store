@@ -37,9 +37,9 @@ export class PricingService {
 
     const lines: PricedLine[] = cart.items.map(item => {
       if (item.product) {
-        if (!item.product.isAvailable || item.product.deletedAt) throw new ApiError(HttpStatus.CONFLICT, 'PRODUCT_UNAVAILABLE', `${item.product.name} hiện đã hết món.`);
+        if (!item.product.isAvailable || item.product.deletedAt) throw new ApiError(HttpStatus.CONFLICT, 'PRODUCT_UNAVAILABLE', `${item.product.name} hiện đã hết hàng.`);
         const recipeAvailable = !item.product.recipes.length || item.product.recipes.some(recipe => recipe.ingredients.every(line => line.ingredient.currentQuantity.sub(line.ingredient.reservedQuantity).greaterThanOrEqualTo(line.quantity.mul(item.quantity))));
-        if (!recipeAvailable) throw new ApiError(HttpStatus.CONFLICT, 'INSUFFICIENT_INVENTORY', `${item.product.name} không đủ nguyên liệu để phục vụ số lượng đã chọn.`);
+        if (!recipeAvailable) throw new ApiError(HttpStatus.CONFLICT, 'INSUFFICIENT_INVENTORY', `${item.product.name} không đủ hàng trong kho để phục vụ số lượng đã chọn.`);
         if (item.variant && item.variant.productId !== item.product.id) throw new ApiError(HttpStatus.BAD_REQUEST, 'VARIANT_INVALID', 'Biến thể không thuộc sản phẩm đã chọn.');
         const options = item.options.map(selected => ({ groupName: selected.optionValue.optionGroup.name, valueName: selected.optionValue.name, priceAdjustment: selected.optionValue.priceAdjustment }));
         const unitPrice = calculateProductUnitPrice(item.product.basePrice, item.variant?.priceAdjustment ?? 0, options.map(option => option.priceAdjustment));
@@ -48,7 +48,7 @@ export class PricingService {
       if (item.combo) {
         if (!item.combo.isActive || item.combo.deletedAt) throw new ApiError(HttpStatus.CONFLICT, 'PRODUCT_UNAVAILABLE', `${item.combo.name} hiện không khả dụng.`);
         const comboAvailable = item.combo.items.every(comboItem => !comboItem.product.recipes.length || comboItem.product.recipes.some(recipe => recipe.ingredients.every(line => line.ingredient.currentQuantity.sub(line.ingredient.reservedQuantity).greaterThanOrEqualTo(line.quantity.mul(comboItem.quantity * item.quantity)))));
-        if (!comboAvailable) throw new ApiError(HttpStatus.CONFLICT, 'INSUFFICIENT_INVENTORY', `${item.combo.name} không đủ nguyên liệu để phục vụ số lượng đã chọn.`);
+        if (!comboAvailable) throw new ApiError(HttpStatus.CONFLICT, 'INSUFFICIENT_INVENTORY', `${item.combo.name} không đủ hàng trong kho để phục vụ số lượng đã chọn.`);
         const original = item.combo.items.reduce((sum, comboItem) => sum + (comboItem.product.basePrice + (comboItem.variant?.priceAdjustment ?? 0)) * comboItem.quantity, 0);
         const unitPrice = calculateComboPrice(original, item.combo.discountPercentage);
         return { cartItemId: item.id, comboId: item.combo.id, name: item.combo.name, quantity: item.quantity, unitPrice, lineSubtotal: unitPrice * item.quantity, comboSavings: (original - unitPrice) * item.quantity, note: item.note ?? undefined, options: [], requiresKitchen: true };

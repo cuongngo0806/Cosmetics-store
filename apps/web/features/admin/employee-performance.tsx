@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ChefHat, Clock3, Pencil, Plus, ReceiptText, Trash2 } from 'lucide-react';
+import { PackageOpen, Clock3, Pencil, Plus, ReceiptText, Trash2 } from 'lucide-react';
 import { EmptyState, LoadingState } from '@/components/loading-state';
 import { StatusBadge } from '@/components/status-badge';
 import { apiRequest, authHeaders } from '@/lib/api';
@@ -28,7 +28,7 @@ export function EmployeePerformance() {
     const email = ask('Email đăng nhập');
     const workRole = ask('Vai trò: CASHIER hoặc KITCHEN_STAFF', 'CASHIER');
     const hireDate = ask('Ngày vào làm YYYY-MM-DD', new Date().toISOString().slice(0, 10));
-    const password = ask('Mật khẩu ban đầu (ít nhất 8 ký tự)', 'CanteenGo@123');
+    const password = ask('Mật khẩu ban đầu (ít nhất 8 ký tự)', 'Glow@12345');
     if (!employeeCode || !fullName || !email || !workRole || !hireDate || !password) return;
     create.mutate({ body: { employeeCode, fullName, email, workRole, hireDate: new Date(`${hireDate}T00:00:00+07:00`).toISOString(), password, phone: ask('Số điện thoại') || undefined } });
   }
@@ -45,7 +45,7 @@ export function EmployeePerformance() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-        <div><p className="eyebrow">Hiệu suất minh bạch</p><h2 className="mt-2 text-3xl font-black">Nhân viên</h2></div>
+        <div><p className="eyebrow">Hiệu sản phẩm minh bạch</p><h2 className="mt-2 text-3xl font-black">Nhân viên</h2></div>
         <button onClick={add} className="button-primary"><Plus size={17} />Thêm nhân viên</button>
       </div>
       {create.isError && <p className="rounded-2xl bg-red-50 p-3 text-sm font-bold text-red-700">{(create.error as Error).message}</p>}
@@ -61,16 +61,16 @@ export function EmployeePerformance() {
                     { icon: ReceiptText, label: 'Đã giao', value: `${employee.completedHandoffs}` },
                   ]
                 : [
-                    { icon: ChefHat, label: 'Đã nhận món', value: `${employee.claimedItems}` },
-                    { icon: Clock3, label: 'Chế biến trung bình', value: `${employee.averagePreparationMinutes} phút` },
-                    { icon: ChefHat, label: 'Hoàn tất', value: `${employee.completedItems}` },
+                    { icon: PackageOpen, label: 'Đã nhận hàng', value: `${employee.claimedItems}` },
+                    { icon: Clock3, label: 'Đóng gói trung bình', value: `${employee.averagePreparationMinutes} phút` },
+                    { icon: PackageOpen, label: 'Hoàn tất', value: `${employee.completedItems}` },
                   ];
               return (
                 <article key={employee.id} className="flex flex-col gap-4 px-5 py-5 lg:flex-row lg:items-center">
                   <div className="flex min-w-0 items-center gap-4 lg:w-72 lg:shrink-0">
                     <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-brand-100 font-black text-brand-800 dark:bg-brand-900/40 dark:text-brand-100">{employee.fullName?.slice(0, 2).toUpperCase()}</span>
                     <div className="min-w-0"><h3 className="truncate font-black">{employee.fullName}</h3><p className="mt-1 truncate text-sm text-[color:var(--muted)]">{employee.employeeCode} · {employee.email}</p></div>
-                    <StatusBadge value={employee.workRole === 'CASHIER' ? 'Thu ngân' : employee.workRole === 'KITCHEN_STAFF' ? 'Nhân viên bếp' : employee.workRole} />
+                    <StatusBadge value={employee.workRole === 'CASHIER' ? 'Thu ngân' : employee.workRole === 'KITCHEN_STAFF' ? 'Nhân viên kho' : employee.workRole} />
                   </div>
                   <dl className="grid flex-1 gap-2 sm:grid-cols-3 lg:pl-4">
                     {metrics.map(({ icon: Icon, label, value }) => <div key={label} className="flex items-center gap-3 rounded-xl bg-brand-50/70 px-3 py-2 dark:bg-brand-900/20"><Icon size={17} className="shrink-0 text-brand-700 dark:text-brand-200" /><div className="min-w-0"><dt className="truncate text-xs text-[color:var(--muted)]">{label}</dt><dd className="mt-0.5 font-black">{value}</dd></div></div>)}

@@ -27,7 +27,7 @@ export function RecoveryForm({ mode }: { mode: 'forgot' | 'reset' }) {
   };
 
   return <form onSubmit={submit} className="mt-8 space-y-5">
-    {mode === 'forgot' ? <label className="block"><span className="mb-2 block text-sm font-bold">Email trường</span><input className="field" type="email" required value={email} onChange={event => setEmail(event.target.value)} placeholder="2373240001@hpn.edu.vn" /></label> : <>
+    {mode === 'forgot' ? <label className="block"><span className="mb-2 block text-sm font-bold">Email</span><input className="field" type="email" required value={email} onChange={event => setEmail(event.target.value)} placeholder="ban@example.com" /></label> : <>
       <label className="block"><span className="mb-2 block text-sm font-bold">Token đặt lại</span><input className="field" required value={token} onChange={event => setToken(event.target.value)} /></label>
       <label className="block"><span className="mb-2 block text-sm font-bold">Mật khẩu mới</span><input className="field" type="password" minLength={8} required value={password} onChange={event => setPassword(event.target.value)} placeholder="Có chữ hoa, chữ thường và số" /></label>
       <label className="block"><span className="mb-2 block text-sm font-bold">Xác nhận mật khẩu</span><input className="field" type="password" minLength={8} required value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} /></label>

@@ -41,7 +41,7 @@ export async function storeImage(options: StoreImageOptions): Promise<string> {
       const upload = cloudinary.uploader.upload_stream(
         {
           resource_type: 'image',
-          folder: `canteenpn/${options.folder}`,
+          folder: `glowbeauty/${options.folder}`,
           public_id: publicId,
           overwrite: false,
         },

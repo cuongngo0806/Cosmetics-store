@@ -39,7 +39,7 @@ export function ProductDetail({ slug }: { slug: string }) {
     }),
     onSuccess: cart => {
       queryClient.setQueryData(['cart', token], cart);
-      setMessage('Đã thêm món vào giỏ hàng.');
+      setMessage('Đã thêm sản phẩm vào giỏ hàng.');
     },
     onError: (error: Error) => setMessage(error.message ?? 'Vui lòng đăng nhập')
   });
@@ -49,11 +49,11 @@ export function ProductDetail({ slug }: { slug: string }) {
 
   return <div className="grid gap-8 lg:grid-cols-2">
     <div className="min-h-[430px] overflow-hidden rounded-4xl bg-gradient-to-br from-brand-100 to-amber-100">
-      <img src={item.imageUrl ?? '/images/default-student-avatar.svg'} alt={item.name} className="h-full w-full object-cover" />
+      <img src={item.imageUrl ?? '/images/hero-cosmetics.svg'} alt={item.name} className="h-full w-full object-cover" />
     </div>
     <div>
       <div className="flex flex-wrap gap-2">
-        {item.isVegetarian && <span className="status-pill"><Leaf size={14} /> Món chay</span>}
+        {item.isVegetarian && <span className="status-pill"><Leaf size={14} /> Thuần chay</span>}
         <span className="status-pill"><Clock3 size={14} /> {item.preparationTimeMinutes} phút</span>
         <span className="status-pill"><Star size={14} /> {item.averageRating} ({item.totalReviews})</span>
       </div>

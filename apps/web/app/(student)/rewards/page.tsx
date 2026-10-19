@@ -1,1 +1,1 @@
-import { StudentPage } from '@/components/student-page'; import { StudentAccount } from '@/features/student/student-account'; export default function Page(){return <StudentPage eyebrow="Ăn ngon, tích điểm" title="Điểm thưởng"><StudentAccount mode="rewards"/></StudentPage>}
+import { StudentPage } from '@/components/student-page'; import { StudentAccount } from '@/features/student/student-account'; export default function Page(){return <StudentPage eyebrow="Mua sắm, tích điểm" title="Điểm thưởng"><StudentAccount mode="rewards"/></StudentPage>}

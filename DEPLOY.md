@@ -1,11 +1,11 @@
-# Hướng dẫn deploy CanteenPN miễn phí
+# Hướng dẫn deploy GlowBeauty miễn phí
 
 Tài liệu này triển khai hệ thống theo kiến trúc:
 
 - **Vercel**: giao diện Next.js.
 - **Render**: NestJS API và Socket.IO.
 - **Neon**: PostgreSQL.
-- **Cloudinary**: ảnh đại diện và ảnh món ăn.
+- **Cloudinary**: ảnh đại diện và ảnh sản phẩm.
 
 Redis không bắt buộc khi Render chỉ chạy một API instance.
 
@@ -13,11 +13,11 @@ Redis không bắt buộc khi Render chỉ chạy một API instance.
 
 | Thành phần | Nơi chạy/lưu trữ | Tên hoặc địa chỉ hiện tại | Nơi quản lý |
 | --- | --- | --- | --- |
-| Mã nguồn | GitHub | `ChipBo118/CanteenPN`, nhánh `main` | [GitHub](https://github.com/ChipBo118/CanteenPN) |
-| Giao diện web | Vercel | [https://canteenpn.vercel.app](https://canteenpn.vercel.app) | [Vercel Dashboard](https://vercel.com/dashboard) |
-| Backend/API và Socket.IO | Render | `canteenpn-api`, [health check](https://canteenpn-api.onrender.com/api/health) | [Render Dashboard](https://dashboard.render.com) |
-| PostgreSQL | Neon | Project `CanteenPN`, database `neondb` | [Neon Console](https://console.neon.tech) |
-| Ảnh tải lên | Cloudinary | Ảnh đại diện và ảnh món ăn | [Cloudinary Console](https://console.cloudinary.com) |
+| Mã nguồn | GitHub | `cuongngo0806/Cosmetics-store`, nhánh `main` | [GitHub](https://github.com/cuongngo0806/Cosmetics-store) |
+| Giao diện web | Vercel | [https://glowbeauty.vercel.app](https://glowbeauty.vercel.app) | [Vercel Dashboard](https://vercel.com/dashboard) |
+| Backend/API và Socket.IO | Render | `glowbeauty-api`, [health check](https://glowbeauty-api.onrender.com/api/health) | [Render Dashboard](https://dashboard.render.com) |
+| PostgreSQL | Neon | Project `GlowBeauty`, database `neondb` | [Neon Console](https://console.neon.tech) |
+| Ảnh tải lên | Cloudinary | Ảnh đại diện và ảnh sản phẩm | [Cloudinary Console](https://console.cloudinary.com) |
 
 Máy tính cá nhân **không phải máy chủ production**. Sau khi code đã được push lên GitHub và deploy thành công, có thể tắt máy tính mà website vẫn hoạt động. GitHub chỉ lưu mã nguồn và kích hoạt auto-deploy; request của người dùng được Vercel và Render xử lý, còn dữ liệu nằm trên Neon và Cloudinary.
 
@@ -25,7 +25,7 @@ Luồng một request production:
 
 ```text
 Trình duyệt
-  -> Vercel (Next.js, canteenpn.vercel.app)
+  -> Vercel (Next.js, glowbeauty.vercel.app)
   -> /api được chuyển tiếp tới Render (NestJS)
   -> Render đọc/ghi PostgreSQL trên Neon
   -> Render tải và đọc ảnh trên Cloudinary
@@ -48,7 +48,7 @@ Theo dõi quá trình tại **Deploys** trên Render và **Deployments** trên V
 
 ### Khởi động lại backend
 
-1. Mở Render Dashboard và chọn `canteenpn-api`.
+1. Mở Render Dashboard và chọn `glowbeauty-api`.
 2. Mở trang **Deploys**.
 3. Chọn **Manual Deploy → Restart service** để khởi động lại đúng commit/cấu hình đang chạy.
 4. Nếu muốn lấy code mới nhất từ GitHub, chọn **Deploy latest commit**.
@@ -58,7 +58,7 @@ Restart hoặc redeploy không xóa dữ liệu Neon. Khi database đã có dữ
 
 ### Tắt và bật tạm thời
 
-- **Render:** trong danh sách service, chọn `canteenpn-api`, mở menu hành động và chọn **Suspend**. Khi cần bật lại, chọn **Resume**. Khi backend bị suspend, giao diện Vercel vẫn mở được nhưng đăng nhập, menu và các chức năng dữ liệu sẽ không hoạt động.
+- **Render:** trong danh sách service, chọn `glowbeauty-api`, mở menu hành động và chọn **Suspend**. Khi cần bật lại, chọn **Resume**. Khi backend bị suspend, giao diện Vercel vẫn mở được nhưng đăng nhập, sản phẩm và các chức năng dữ liệu sẽ không hoạt động.
 - **Vercel:** project có thể được pause bằng chức năng pause project/API của Vercel. Khi project bị pause, URL production trả lỗi `503 DEPLOYMENT_PAUSED`. Để bật lại, mở project → **Settings** và chọn **Resume Service** trong thông báo project đang pause.
 - **Render Free tự ngủ:** nếu không có truy cập khoảng 15 phút, Render tự spin down. Đây không phải tắt dự án và không cần thao tác bật; request hoặc kết nối WebSocket tiếp theo sẽ tự đánh thức service, thường làm lần mở đầu chậm 30–60 giây.
 - **Neon và Cloudinary:** không cần tắt khi tạm ngừng website. Giữ hai dịch vụ này để database và ảnh không bị mất.
@@ -95,7 +95,7 @@ git push origin main
 Repository hiện được cấu hình với remote:
 
 ```text
-https://github.com/ChipBo118/CanteenPN.git
+https://github.com/cuongngo0806/Cosmetics-store.git
 ```
 
 Không đưa connection string, API secret hoặc mật khẩu thật vào GitHub.
@@ -103,7 +103,7 @@ Không đưa connection string, API secret hoặc mật khẩu thật vào GitHu
 ## 1. Tạo PostgreSQL trên Neon
 
 1. Mở [Neon Console](https://console.neon.tech) và chọn **New Project**.
-2. Đặt tên, ví dụ `canteenpn`.
+2. Đặt tên, ví dụ `glowbeauty`.
 3. Chọn region gần Singapore nếu tài khoản cung cấp lựa chọn này.
 4. Sau khi tạo, mở phần **Connection Details**.
 5. Bật **Pooled connection** và sao chép connection string.
@@ -142,7 +142,7 @@ Repository đã có `render.yaml`, vì vậy nên dùng Blueprint:
 1. Mở [Render Dashboard](https://dashboard.render.com).
 2. Chọn **New + → Blueprint**.
 3. Kết nối GitHub nếu chưa kết nối.
-4. Chọn repository `ChipBo118/CanteenPN`.
+4. Chọn repository `cuongngo0806/Cosmetics-store`.
 5. Render tự nhận file `render.yaml` ở thư mục gốc.
 6. Nhập các biến được Render yêu cầu.
 
@@ -163,13 +163,13 @@ Repository đã có `render.yaml`, vì vậy nên dùng Blueprint:
 10. Sao chép URL Render, ví dụ:
 
 ```text
-https://canteenpn-api.onrender.com
+https://glowbeauty-api.onrender.com
 ```
 
 Mở URL health sau để kiểm tra:
 
 ```text
-https://canteenpn-api.onrender.com/api/health
+https://glowbeauty-api.onrender.com/api/health
 ```
 
 Nếu nhận phản hồi thành công, API đã hoạt động. Render Free có thể ngủ sau 15 phút không có truy cập; request đầu tiên sau đó sẽ chậm hơn trong lúc service khởi động lại. Xem [Render free web services](https://render.com/docs/your-first-deploy).
@@ -178,14 +178,14 @@ Nếu nhận phản hồi thành công, API đã hoạt động. Render Free có
 
 1. Mở [Vercel Dashboard](https://vercel.com/dashboard).
 2. Chọn **Add New → Project**.
-3. Import repository `ChipBo118/CanteenPN`.
+3. Import repository `cuongngo0806/Cosmetics-store`.
 4. Đặt **Root Directory** thành `apps/web`. Giữ tùy chọn cho phép sử dụng file ngoài Root Directory để Vercel đọc workspace và lockfile ở thư mục gốc.
 5. Framework Preset phải là **Next.js**.
 6. Thêm hai biến môi trường sau cho Production và Preview:
 
 | Biến | Giá trị |
 | --- | --- |
-| `API_PROXY_TARGET` | URL Render, không thêm `/api`, ví dụ `https://canteenpn-api.onrender.com` |
+| `API_PROXY_TARGET` | URL Render, không thêm `/api`, ví dụ `https://glowbeauty-api.onrender.com` |
 | `NEXT_PUBLIC_SOCKET_URL` | Cùng URL Render ở trên |
 
 Không tạo `NEXT_PUBLIC_API_URL` trên Vercel. Web sẽ gọi `/api` trên cùng domain Vercel và chuyển tiếp request đến Render, giúp refresh cookie hoạt động đúng.
@@ -194,7 +194,7 @@ Không tạo `NEXT_PUBLIC_API_URL` trên Vercel. Web sẽ gọi `/api` trên cù
 8. Khi hoàn tất, sao chép URL production, ví dụ:
 
 ```text
-https://canteenpn.vercel.app
+https://glowbeauty.vercel.app
 ```
 
 Nếu thay đổi biến môi trường Vercel sau này, phải redeploy để deployment mới nhận giá trị. Xem [Vercel Environment Variables](https://vercel.com/docs/environment-variables).
@@ -204,12 +204,12 @@ Nếu thay đổi biến môi trường Vercel sau này, phải redeploy để d
 Sau khi đã có URL Vercel:
 
 1. Quay lại Render Dashboard.
-2. Mở service `canteenpn-api`.
+2. Mở service `glowbeauty-api`.
 3. Mở **Environment**.
 4. Đổi `WEB_ORIGIN` thành đúng URL Vercel, ví dụ:
 
 ```text
-https://canteenpn.vercel.app
+https://glowbeauty.vercel.app
 ```
 
 Không thêm dấu `/` ở cuối URL.
@@ -224,17 +224,17 @@ Render hỗ trợ khai báo secret bằng `sync: false` và yêu cầu nhập tr
 Thực hiện lần lượt:
 
 1. Mở `https://<render-domain>/api/health`.
-2. Mở URL Vercel và kiểm tra menu có dữ liệu.
+2. Mở URL Vercel và kiểm tra trang sản phẩm có dữ liệu.
 3. Đăng nhập bằng một tài khoản mẫu và mật khẩu đã nhập ở `SEED_DEMO_PASSWORD`.
 4. Thử tạo đơn hàng.
-5. Mở màn hình thu ngân/bếp bằng máy hoặc trình duyệt khác để kiểm tra realtime.
-6. Thử tải ảnh đại diện hoặc ảnh món ăn.
-7. Mở Cloudinary Console để xác nhận ảnh xuất hiện trong thư mục `canteenpn`.
+5. Mở màn hình thu ngân/kho bằng máy hoặc trình duyệt khác để kiểm tra realtime.
+6. Thử tải ảnh đại diện hoặc ảnh sản phẩm.
+7. Mở Cloudinary Console để xác nhận ảnh xuất hiện trong thư mục `glowbeauty`.
 
 Tài khoản quản trị mẫu:
 
 ```text
-Email: admin@canteen.hpn.edu.vn
+Email: admin@glowbeauty.vn
 Mật khẩu: giá trị SEED_DEMO_PASSWORD đã nhập trên Render
 ```
 
@@ -285,7 +285,7 @@ Kiểm tra thật kỹ connection string trước khi chạy. Không dùng lện
 - Dùng pooled connection string có `-pooler` và `sslmode=require`.
 - Nếu đã đổi mật khẩu database trên Neon, cập nhật lại biến trên Render.
 
-### Web mở được nhưng không tải được menu
+### Web mở được nhưng không tải được sản phẩm
 
 - Kiểm tra URL `/api/health` của Render trước.
 - Kiểm tra `API_PROXY_TARGET` trên Vercel không có `/api` ở cuối.
@@ -318,6 +318,6 @@ Kiểm tra thật kỹ connection string trước khi chạy. Không dùng lện
 - [ ] Render health endpoint phản hồi.
 - [ ] Vercel deploy thành công.
 - [ ] `WEB_ORIGIN` đã đổi thành URL Vercel.
-- [ ] Đăng nhập và tải menu thành công.
+- [ ] Đăng nhập và tải sản phẩm thành công.
 - [ ] Realtime hoạt động giữa hai trình duyệt.
 - [ ] Ảnh mới xuất hiện trên Cloudinary.

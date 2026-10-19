@@ -11,8 +11,8 @@ const beVietnamPro = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
-  title: { default: 'CanteenPN', template: '%s · CanteenPN' },
-  description: 'Đặt món trước, nhận món đúng giờ tại căng tin trường.',
+  title: { default: 'GlowBeauty', template: '%s · GlowBeauty' },
+  description: 'Cửa hàng mĩ phẩm chính hãng: chăm sóc da, trang điểm, tóc, cơ thể và nước hoa.',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

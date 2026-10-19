@@ -6,7 +6,7 @@ import { RequireSession } from '@/components/require-session';
 
 const titles: Record<string, string> = {
   orders: 'Đơn hàng',
-  menu: 'Quản lý thực đơn',
+  menu: 'Quản lý sản phẩm',
   inventory: 'Kho hàng',
   vouchers: 'Voucher',
   finance: 'Tài chính',

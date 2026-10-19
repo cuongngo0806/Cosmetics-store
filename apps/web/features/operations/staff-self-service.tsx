@@ -115,7 +115,7 @@ export function StaffSelfService({ mode }: { mode: 'shifts' | 'attendance' | 'co
                 {nextShift ? (
                   <>
                     <p className="mt-2 text-lg font-black">{nextShift.startTime} – {nextShift.endTime}</p>
-                    <p className="mt-1 text-sm text-[color:var(--muted)]">{formatDateTime(nextShift.date).split(' ')[0]} · {nextShift.location ?? 'Căng tin trung tâm'}</p>
+                    <p className="mt-1 text-sm text-[color:var(--muted)]">{formatDateTime(nextShift.date).split(' ')[0]} · {nextShift.location ?? 'Cửa hàng trung tâm'}</p>
                   </>
                 ) : <p className="mt-2 text-sm text-[color:var(--muted)]">Chưa có ca sắp tới.</p>}
               </div>
@@ -170,7 +170,7 @@ export function StaffSelfService({ mode }: { mode: 'shifts' | 'attendance' | 'co
                     </div>
                     <StatusBadge value={shift.attendance?.status ?? shift.status} />
                   </div>
-                  <p className="mt-4 flex items-center gap-2 text-sm"><MapPin size={15} />{shift.location ?? 'Căng tin trung tâm'}</p>
+                  <p className="mt-4 flex items-center gap-2 text-sm"><MapPin size={15} />{shift.location ?? 'Cửa hàng trung tâm'}</p>
                   <p className="mt-3 text-xs text-[color:var(--muted)]">
                     Vào ca: {timeOnly(shift.attendance?.clockInAt)} · Tan ca: {timeOnly(shift.attendance?.clockOutAt)}
                   </p>

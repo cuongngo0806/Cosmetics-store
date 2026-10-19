@@ -53,7 +53,7 @@ export class InventoryService {
     for (const [ingredientId, quantity] of totals) {
       const ingredient = await tx.ingredient.findUniqueOrThrow({ where: { id: ingredientId } });
       const available = ingredient.currentQuantity.sub(ingredient.reservedQuantity);
-      if (available.lessThan(quantity)) throw new ApiError(HttpStatus.CONFLICT, 'INSUFFICIENT_INVENTORY', `Không đủ nguyên liệu ${ingredient.name}.`, { ingredientId, ingredientName: ingredient.name, required: quantity.toString(), available: available.toString() });
+      if (available.lessThan(quantity)) throw new ApiError(HttpStatus.CONFLICT, 'INSUFFICIENT_INVENTORY', `Không đủ hàng trong kho ${ingredient.name}.`, { ingredientId, ingredientName: ingredient.name, required: quantity.toString(), available: available.toString() });
       const updated = await tx.ingredient.updateMany({ where: { id: ingredientId, currentQuantity: ingredient.currentQuantity, reservedQuantity: ingredient.reservedQuantity }, data: { reservedQuantity: { increment: quantity } } });
       if (!updated.count) throw new ApiError(HttpStatus.CONFLICT, 'INVENTORY_CHANGED', 'Tồn kho vừa thay đổi. Vui lòng thử nhận đơn lại.');
       await tx.inventoryTransaction.create({ data: { ingredientId, type: InventoryTransactionType.RESERVE, quantity, quantityBefore: ingredient.currentQuantity, quantityAfter: ingredient.currentQuantity, reservedBefore: ingredient.reservedQuantity, reservedAfter: ingredient.reservedQuantity.add(quantity), referenceType: 'ORDER', referenceId: orderId } });
