@@ -9,7 +9,7 @@ import { DepositDto, LinkBankDto, WithdrawDto } from './wallet.dto';
 @Injectable()
 export class WalletService {
   constructor(private readonly prisma: PrismaService, private readonly realtime: RealtimeService) {}
-  private async profile(userId: string) { const profile = await this.prisma.studentProfile.findUnique({ where: { userId } }); if (!profile) throw new ApiError(HttpStatus.FORBIDDEN, 'STUDENT_PROFILE_REQUIRED', 'Chỉ sinh viên mới có ví.'); return profile; }
+  private async profile(userId: string) { const profile = await this.prisma.studentProfile.findUnique({ where: { userId } }); if (!profile) throw new ApiError(HttpStatus.FORBIDDEN, 'STUDENT_PROFILE_REQUIRED', 'Chỉ khách hàng mới có ví.'); return profile; }
   async get(userId: string) { const profile = await this.profile(userId); return this.prisma.wallet.findUniqueOrThrow({ where: { studentProfileId: profile.id }, include: { transactions: { orderBy: { createdAt: 'desc' }, take: 100 }, requests: { where: { status: { not: WalletRequestStatus.APPROVED } }, orderBy: { createdAt: 'desc' }, take: 30 } } }); }
   async requests(userId: string) { const profile = await this.profile(userId); const wallet = await this.prisma.wallet.findUniqueOrThrow({ where: { studentProfileId: profile.id } }); return this.prisma.walletRequest.findMany({ where: { walletId: wallet.id, status: { not: WalletRequestStatus.APPROVED } }, orderBy: { createdAt: 'desc' }, take: 100 }); }
   async linkBank(userId: string, dto: LinkBankDto) {
@@ -24,7 +24,7 @@ export class WalletService {
     if (wallet.status !== WalletStatus.ACTIVE) throw new ApiError(HttpStatus.CONFLICT, 'WALLET_INACTIVE', 'Ví đang bị tạm khóa.');
     const requestCode = `NAP-${randomUUID().replaceAll('-', '').slice(0, 10).toUpperCase()}`;
     const request = await this.prisma.walletRequest.create({ data: { requestCode, walletId: wallet.id, type: WalletRequestType.DEPOSIT, amount: dto.amount, method: dto.method, note: dto.note } });
-    return { ...request, qrPayload: dto.method === 'QR' ? `CANTEENPN|${requestCode}|${dto.amount}` : null };
+    return { ...request, qrPayload: dto.method === 'QR' ? `GLOWBEAUTY|${requestCode}|${dto.amount}` : null };
   }
   async withdraw(userId: string, dto: WithdrawDto) {
     const profile = await this.profile(userId);
@@ -43,6 +43,6 @@ export class WalletService {
     this.realtime.emitToUser(userId, 'wallet:updated', request);
     return request;
   }
-  async topUp(userId: string, amount: number) { const profile = await this.profile(userId); const transaction = await this.prisma.$transaction(async tx => { const wallet = await tx.wallet.findUniqueOrThrow({ where: { studentProfileId: profile.id } }); if (wallet.status !== WalletStatus.ACTIVE) throw new ApiError(HttpStatus.CONFLICT, 'WALLET_INACTIVE', 'Ví đang bị tạm khóa.'); const after = wallet.balance + amount; await tx.wallet.update({ where: { id: wallet.id }, data: { balance: after } }); const entry = await tx.walletTransaction.create({ data: { walletId: wallet.id, type: WalletTransactionType.TOP_UP, amount, balanceBefore: wallet.balance, balanceAfter: after, description: 'Nạp tiền mô phỏng', reference: `TOPUP-${randomUUID()}` } }); await tx.notification.create({ data: { userId, type: NotificationType.WALLET, title: 'Nạp ví thành công', message: `Ví CanteenPN đã được cộng ${amount.toLocaleString('vi-VN')} ₫.` } }); return entry; }); this.realtime.emitToUser(userId, 'wallet:updated', transaction); return transaction; }
+  async topUp(userId: string, amount: number) { const profile = await this.profile(userId); const transaction = await this.prisma.$transaction(async tx => { const wallet = await tx.wallet.findUniqueOrThrow({ where: { studentProfileId: profile.id } }); if (wallet.status !== WalletStatus.ACTIVE) throw new ApiError(HttpStatus.CONFLICT, 'WALLET_INACTIVE', 'Ví đang bị tạm khóa.'); const after = wallet.balance + amount; await tx.wallet.update({ where: { id: wallet.id }, data: { balance: after } }); const entry = await tx.walletTransaction.create({ data: { walletId: wallet.id, type: WalletTransactionType.TOP_UP, amount, balanceBefore: wallet.balance, balanceAfter: after, description: 'Nạp tiền mô phỏng', reference: `TOPUP-${randomUUID()}` } }); await tx.notification.create({ data: { userId, type: NotificationType.WALLET, title: 'Nạp ví thành công', message: `Ví GlowBeauty đã được cộng ${amount.toLocaleString('vi-VN')} ₫.` } }); return entry; }); this.realtime.emitToUser(userId, 'wallet:updated', transaction); return transaction; }
 }
 

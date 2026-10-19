@@ -37,10 +37,10 @@ export function AdminOrders({ detailBase = '/admin/orders' }: { detailBase?: str
   return <div className="space-y-5">
     <div><p className="eyebrow">Giám sát xuyên suốt</p><h2 className="mt-2 text-3xl font-black">Tất cả đơn hàng</h2></div>
     <div className="flex flex-col gap-3 lg:flex-row">
-      <label className="relative flex-1"><Search size={17} className="absolute left-4 top-3.5"/><input className="field pl-11" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Mã đơn, sinh viên, món…"/></label>
+      <label className="relative flex-1"><Search size={17} className="absolute left-4 top-3.5"/><input className="field pl-11" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Mã đơn, khách hàng, sản phẩm…"/></label>
       <select className="field max-w-xs" value={status} onChange={(event) => setStatus(event.target.value)}><option value="ALL">Mọi trạng thái</option>{['PENDING', 'ACCEPTED', 'PREPARING', 'READY', 'COMPLETED', 'REJECTED', 'CANCELLED'].map((value) => <option key={value}>{value}</option>)}</select>
     </div>
-    {rows.length ? <div className="table-shell"><table className="data-table"><thead><tr><th>Mã đơn</th><th>Sinh viên</th><th>Món</th><th>Thanh toán</th><th>Trạng thái</th><th>Tổng</th><th/></tr></thead><tbody>{rows.map((order) => <tr key={order.id}>
+    {rows.length ? <div className="table-shell"><table className="data-table"><thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Sản phẩm</th><th>Thanh toán</th><th>Trạng thái</th><th>Tổng</th><th/></tr></thead><tbody>{rows.map((order) => <tr key={order.id}>
       <td><Link href={`${detailBase}/${order.id}`} className="font-black text-brand-600">{order.orderCode}</Link><span className="block text-xs opacity-60">{formatDateTime(order.createdAt)}</span></td>
       <td>{order.studentProfile.studentDirectory.fullName}<span className="block text-xs opacity-60">{order.studentProfile.studentDirectory.studentCode}</span></td>
       <td>{order.items.slice(0, 2).map((item) => `${item.quantity}× ${item.productNameSnapshot}`).join(', ')}</td>

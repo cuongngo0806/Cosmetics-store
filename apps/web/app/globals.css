@@ -4,20 +4,20 @@
 
 :root {
   color-scheme: light;
-  --background: #fbfaf5;
-  --foreground: #17362f;
+  --background: #fdf8f9;
+  --foreground: #3b1228;
   --surface: #ffffff;
-  --muted: #6f817c;
-  --border: #e5ebe8;
+  --muted: #86707b;
+  --border: #f1e3e9;
 }
 
 .dark {
   color-scheme: dark;
-  --background: #0f1715;
-  --foreground: #e8f3ef;
-  --surface: #17211f;
-  --muted: #9fb4ad;
-  --border: #29403a;
+  --background: #17101a;
+  --foreground: #f6e9ef;
+  --surface: #221821;
+  --muted: #b9a2ae;
+  --border: #3d2a36;
 }
 
 * { border-color: var(--border); }
@@ -41,9 +41,9 @@ body {
 
 @layer components {
   .container-shell { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
-  .surface { background: var(--surface); @apply border shadow-[0_5px_20px_rgba(30,64,54,.035)]; }
-  .button-primary { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-600 px-5 py-2.5 font-bold text-white shadow-[0_10px_24px_rgba(8,127,91,.20)] transition hover:-translate-y-0.5 hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50; }
-  .button-secondary { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-[14px] border bg-white px-5 py-2.5 font-bold text-brand-900 transition hover:border-brand-600 hover:bg-brand-50 dark:bg-[#17211f] dark:text-white; }
+  .surface { background: var(--surface); @apply border shadow-[0_5px_20px_rgba(70,30,50,.035)]; }
+  .button-primary { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-[14px] bg-brand-600 px-5 py-2.5 font-bold text-white shadow-[0_10px_24px_rgba(190,24,93,.20)] transition hover:-translate-y-0.5 hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50; }
+  .button-secondary { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-[14px] border bg-white px-5 py-2.5 font-bold text-brand-900 transition hover:border-brand-600 hover:bg-brand-50 dark:bg-[#221821] dark:text-white; }
   .eyebrow { @apply text-xs font-bold uppercase tracking-[0.18em] text-brand-600; }
   .field { @apply h-12 w-full rounded-xl border bg-[color:var(--surface)] px-4 text-sm outline-none transition focus:border-brand-600 focus:ring-4 focus:ring-brand-50 dark:focus:ring-brand-900/30; }
   .status-pill { @apply inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-bold text-brand-700 dark:bg-brand-900/40 dark:text-brand-100; }

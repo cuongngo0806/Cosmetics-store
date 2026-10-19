@@ -20,7 +20,7 @@ export class AuthController {
     response.cookie(COOKIE, token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/api/auth', maxAge: Number(process.env.JWT_REFRESH_TTL_DAYS ?? 30) * 86_400_000 });
   }
 
-  @Public() @Post('register/student') @ApiOperation({ summary: 'Đăng ký bằng email trong StudentDirectory' })
+  @Public() @Post(['register', 'register/student']) @ApiOperation({ summary: 'Đăng ký tài khoản khách hàng bằng email bất kỳ' })
   async register(@Body() dto: RegisterStudentDto, @Res({ passthrough: true }) response: Response) { const session = await this.auth.registerStudent(dto); this.setCookie(response, session.refreshToken); return { ...session, refreshToken: undefined }; }
 
   @Public() @HttpCode(200) @Post('login')

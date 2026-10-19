@@ -7,17 +7,17 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          50: '#e9f7f1',
-          100: '#d7f0e5',
-          500: '#0ca678',
-          600: '#087f5b',
-          700: '#066b4d',
-          900: '#17362f',
+          50: '#fdeef4',
+          100: '#fbd5e3',
+          500: '#ec4899',
+          600: '#be185d',
+          700: '#9d174d',
+          900: '#3b1228',
         },
-        cream: '#fbfaf5',
+        cream: '#fdf8f9',
       },
       boxShadow: {
-        soft: '0 16px 44px rgba(17, 56, 45, 0.10)',
+        soft: '0 16px 44px rgba(90, 20, 55, 0.10)',
       },
       borderRadius: {
         '4xl': '1.5rem',

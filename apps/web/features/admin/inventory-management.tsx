@@ -37,20 +37,20 @@ export function InventoryManagement() {
     return Number(value);
   };
   function create() {
-    const name = window.prompt('Tên nguyên liệu')?.trim(); if (!name) return;
+    const name = window.prompt('Tên hàng trong kho')?.trim(); if (!name) return;
     const unit = window.prompt('Đơn vị', 'kg')?.trim(); if (!unit) return;
     const currentQuantity = askNumber('Số lượng hiện tại', 0); const lowStockThreshold = askNumber('Ngưỡng sắp hết', 10); const reorderThreshold = askNumber('Ngưỡng nhập lại', 20); const costPerUnit = askNumber('Giá mỗi đơn vị', 0);
     if ([currentQuantity, lowStockThreshold, reorderThreshold, costPerUnit].some(value => value === undefined)) return;
     mutation.mutate({ url: '/admin/ingredients', method: 'POST', body: { name, unit, currentQuantity, lowStockThreshold, reorderThreshold, costPerUnit } });
   }
   function edit(item: Ingredient) {
-    const name = window.prompt('Tên nguyên liệu', item.name)?.trim(); if (!name) return;
+    const name = window.prompt('Tên hàng trong kho', item.name)?.trim(); if (!name) return;
     const unit = window.prompt('Đơn vị', item.unit)?.trim(); if (!unit) return;
     const currentQuantity = askNumber('Số lượng hiện tại', Number(item.currentQuantity)); const lowStockThreshold = askNumber('Ngưỡng sắp hết', Number(item.lowStockThreshold)); const reorderThreshold = askNumber('Ngưỡng nhập lại', Number(item.reorderThreshold)); const costPerUnit = askNumber('Giá mỗi đơn vị', item.costPerUnit);
     if ([currentQuantity, lowStockThreshold, reorderThreshold, costPerUnit].some(value => value === undefined)) return;
     mutation.mutate({ url: `/admin/ingredients/${item.id}`, method: 'PATCH', body: { name, unit, currentQuantity, lowStockThreshold, reorderThreshold, costPerUnit } });
   }
-  function remove(item: Ingredient) { if (window.confirm(`Xóa nguyên liệu “${item.name}”?`)) mutation.mutate({ url: `/admin/ingredients/${item.id}`, method: 'DELETE' }); }
+  function remove(item: Ingredient) { if (window.confirm(`Xóa hàng trong kho “${item.name}”?`)) mutation.mutate({ url: `/admin/ingredients/${item.id}`, method: 'DELETE' }); }
 
   if (query.isLoading) return <LoadingState />;
 
@@ -65,7 +65,7 @@ export function InventoryManagement() {
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div><h2 className="mt-2 text-3xl font-black">Danh sách kho hàng</h2><p className="mt-2 text-sm text-[color:var(--muted)]">Số lượng khả dụng sau khi trừ phần đang giữ cho các đơn hàng.</p></div>
-        <div className="flex gap-2"><button onClick={() => query.refetch()} className="button-secondary"><RefreshCw size={17}/>Làm mới</button><button onClick={create} className="button-primary"><Plus size={17}/>Thêm nguyên liệu</button></div>
+        <div className="flex gap-2"><button onClick={() => query.refetch()} className="button-secondary"><RefreshCw size={17}/>Làm mới</button><button onClick={create} className="button-primary"><Plus size={17}/>Thêm hàng trong kho</button></div>
       </div>
       {mutation.isError && <p className="rounded-2xl bg-red-50 p-3 text-sm font-bold text-red-700">{(mutation.error as Error).message}</p>}
       {mutation.isSuccess && <p className="rounded-2xl bg-brand-50 p-3 text-sm font-bold text-brand-700">Danh sách kho đã được cập nhật.</p>}
@@ -84,7 +84,7 @@ export function InventoryManagement() {
                       <small className="text-base">{ingredient.unit}</small>
                     </p>
                   </div>
-                  <div className="flex items-center gap-1">{isLow ? <AlertTriangle className="text-red-500" /> : <PackageCheck className="text-brand-600" />}<button onClick={() => edit(ingredient)} className="grid h-9 w-9 place-items-center rounded-full hover:bg-slate-100" aria-label="Sửa nguyên liệu"><Pencil size={16}/></button><button onClick={() => remove(ingredient)} className="grid h-9 w-9 place-items-center rounded-full text-red-600 hover:bg-red-50" aria-label="Xóa nguyên liệu"><Trash2 size={16}/></button></div>
+                  <div className="flex items-center gap-1">{isLow ? <AlertTriangle className="text-red-500" /> : <PackageCheck className="text-brand-600" />}<button onClick={() => edit(ingredient)} className="grid h-9 w-9 place-items-center rounded-full hover:bg-slate-100" aria-label="Sửa hàng trong kho"><Pencil size={16}/></button><button onClick={() => remove(ingredient)} className="grid h-9 w-9 place-items-center rounded-full text-red-600 hover:bg-red-50" aria-label="Xóa hàng trong kho"><Trash2 size={16}/></button></div>
                 </div>
                 {isLow && <p className="mt-4 rounded-xl bg-amber-50 p-2 text-xs font-bold text-amber-800">Sắp hết hàng</p>}
               </article>
@@ -92,7 +92,7 @@ export function InventoryManagement() {
           })}
         </div>
       ) : (
-        <div className="surface rounded-3xl p-8 text-center text-sm text-[color:var(--muted)]">Không còn nguyên liệu khả dụng trong kho.</div>
+        <div className="surface rounded-3xl p-8 text-center text-sm text-[color:var(--muted)]">Không còn hàng trong kho khả dụng trong kho.</div>
       )}
     </div>
   );

@@ -1,1 +1,1 @@
-import { StudentPage } from '@/components/student-page'; import { ProfileClient } from '@/features/student/profile-client'; export default function Page(){return <StudentPage eyebrow="Tài khoản trường" title="Hồ sơ sinh viên"><ProfileClient/></StudentPage>}
+import { StudentPage } from '@/components/student-page'; import { ProfileClient } from '@/features/student/profile-client'; export default function Page(){return <StudentPage eyebrow="Tài khoản của tôi" title="Hồ sơ khách hàng"><ProfileClient/></StudentPage>}

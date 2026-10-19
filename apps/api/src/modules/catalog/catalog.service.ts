@@ -35,7 +35,7 @@ export class CatalogService {
 
   async productBySlug(slug: string) {
     const product = await this.prisma.product.findFirst({ where: { slug, deletedAt: null }, include: { category: true, variants: { where: { active: true } }, optionGroups: { orderBy: { sortOrder: 'asc' }, include: { optionGroup: { include: { values: { where: { active: true }, orderBy: { sortOrder: 'asc' } } } } } }, recipes: { include: { ingredients: { include: { ingredient: true } } } }, reviews: { where: { isHidden: false }, orderBy: { createdAt: 'desc' }, take: 10, include: { studentProfile: { select: { studentDirectory: { select: { fullName: true } } } } } } } });
-    if (!product) throw new ApiError(HttpStatus.NOT_FOUND, 'PRODUCT_NOT_FOUND', 'Không tìm thấy món ăn.');
+    if (!product) throw new ApiError(HttpStatus.NOT_FOUND, 'PRODUCT_NOT_FOUND', 'Không tìm thấy sản phẩm.');
     const recipeStock = this.hasRecipeStock(product.recipes);
     return { ...product, isAvailable: product.isAvailable && recipeStock, inventoryAvailability: recipeStock ? 'AVAILABLE' : 'POTENTIALLY_UNAVAILABLE' };
   }

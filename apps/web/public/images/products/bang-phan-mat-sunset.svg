@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 640" role="img" aria-label="SUNSET">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff7ed"/><stop offset="1" stop-color="#fdba74"/></linearGradient></defs>
+<rect width="800" height="640" fill="url(#bg)"/>
+<circle cx="140" cy="120" r="70" fill="#fff" opacity=".35"/><circle cx="680" cy="520" r="110" fill="#fff" opacity=".25"/>
+<ellipse cx="400" cy="572" rx="230" ry="22" fill="#000" opacity=".08"/>
+<rect x="240" y="200" width="320" height="330" rx="30" fill="#7c2d12"/><rect x="270" y="230" width="76" height="76" rx="14" fill="#fde68a"/><rect x="360" y="230" width="76" height="76" rx="14" fill="#fdba74"/><rect x="450" y="230" width="76" height="76" rx="14" fill="#fb923c"/><rect x="270" y="320" width="76" height="76" rx="14" fill="#f97316"/><rect x="360" y="320" width="76" height="76" rx="14" fill="#ea580c"/><rect x="450" y="320" width="76" height="76" rx="14" fill="#c2410c"/><rect x="270" y="410" width="76" height="76" rx="14" fill="#fca5a5"/><rect x="360" y="410" width="76" height="76" rx="14" fill="#f87171"/><rect x="450" y="410" width="76" height="76" rx="14" fill="#9a3412"/>
+<text x="400" y="510" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="700" letter-spacing="5" fill="#fb923c">SUNSET</text>
+<path d="M640 130l8 20 20 8-20 8-8 20-8-20-20-8 20-8z" fill="#fff" opacity=".9"/>
+</svg>

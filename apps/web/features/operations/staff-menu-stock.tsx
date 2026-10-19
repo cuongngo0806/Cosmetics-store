@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { AlertTriangle, PackageCheck, PackageX, Search, UtensilsCrossed } from 'lucide-react';
+import { AlertTriangle, PackageCheck, PackageX, Search, Sparkles } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { EmptyState, LoadingState } from '@/components/loading-state';
 import { apiRequest, formatMoney } from '@/lib/api';
@@ -59,9 +59,9 @@ function toMenuStock(product: CatalogProduct): MenuStock {
 }
 
 const stockLabels = {
-  IN_STOCK: 'Còn món',
+  IN_STOCK: 'Còn hàng',
   LOW_STOCK: 'Sắp hết',
-  OUT_OF_STOCK: 'Hết món',
+  OUT_OF_STOCK: 'Hết hàng',
   UNTRACKED: 'Chưa định lượng',
 } as const;
 
@@ -98,26 +98,26 @@ export function StaffMenuStock() {
   return (
     <div className="space-y-6">
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <article className="surface rounded-2xl p-4"><UtensilsCrossed className="text-brand-600" size={20}/><span className="mt-3 block text-xs text-[color:var(--muted)]">Tổng số món</span><strong className="mt-1 block text-2xl">{items.length}</strong></article>
-        <article className="surface rounded-2xl p-4"><PackageCheck className="text-emerald-600" size={20}/><span className="mt-3 block text-xs text-[color:var(--muted)]">Còn món</span><strong className="mt-1 block text-2xl">{inStock}</strong></article>
+        <article className="surface rounded-2xl p-4"><Sparkles className="text-brand-600" size={20}/><span className="mt-3 block text-xs text-[color:var(--muted)]">Tổng số sản phẩm</span><strong className="mt-1 block text-2xl">{items.length}</strong></article>
+        <article className="surface rounded-2xl p-4"><PackageCheck className="text-emerald-600" size={20}/><span className="mt-3 block text-xs text-[color:var(--muted)]">Còn hàng</span><strong className="mt-1 block text-2xl">{inStock}</strong></article>
         <article className="surface rounded-2xl p-4"><AlertTriangle className="text-amber-600" size={20}/><span className="mt-3 block text-xs text-[color:var(--muted)]">Sắp hết</span><strong className="mt-1 block text-2xl">{lowStock}</strong></article>
-        <article className="surface rounded-2xl p-4"><PackageX className="text-red-600" size={20}/><span className="mt-3 block text-xs text-[color:var(--muted)]">Hết món</span><strong className="mt-1 block text-2xl">{outOfStock}</strong></article>
+        <article className="surface rounded-2xl p-4"><PackageX className="text-red-600" size={20}/><span className="mt-3 block text-xs text-[color:var(--muted)]">Hết hàng</span><strong className="mt-1 block text-2xl">{outOfStock}</strong></article>
       </div>
 
       <label className="relative block max-w-md">
         <Search size={18} className="absolute left-4 top-3.5 text-[color:var(--muted)]" />
-        <input className="field pl-11" value={search} onChange={event => setSearch(event.target.value)} placeholder="Tìm món ăn hoặc danh mục…" />
+        <input className="field pl-11" value={search} onChange={event => setSearch(event.target.value)} placeholder="Tìm sản phẩm hoặc danh mục…" />
       </label>
 
       {query.isError && <p className="rounded-2xl bg-red-50 p-4 text-sm font-bold text-red-700">{(query.error as Error).message}</p>}
       {rows.length ? (
         <div className="table-shell">
           <table className="data-table">
-            <thead><tr><th>Món ăn</th><th>Danh mục</th><th className="text-right">Giá</th><th className="text-center">Số suất còn lại</th><th>Trạng thái</th></tr></thead>
+            <thead><tr><th>Sản phẩm</th><th>Danh mục</th><th className="text-right">Giá</th><th className="text-center">Số lượng còn lại</th><th>Trạng thái</th></tr></thead>
             <tbody>
               {rows.map(item => (
                 <tr key={item.id}>
-                  <td><div className="flex items-center gap-3"><img src={item.imageUrl ?? '/images/default-student-avatar.svg'} alt="" className="h-12 w-12 rounded-xl object-cover"/><strong>{item.name}</strong></div></td>
+                  <td><div className="flex items-center gap-3"><img src={item.imageUrl ?? '/images/hero-cosmetics.svg'} alt="" className="h-12 w-12 rounded-xl object-cover"/><strong>{item.name}</strong></div></td>
                   <td>{item.category}</td>
                   <td className="text-right font-bold text-brand-600">{formatMoney(item.basePrice)}</td>
                   <td className="text-center text-lg font-black">{item.estimatedStock ?? '—'}</td>
@@ -127,8 +127,8 @@ export function StaffMenuStock() {
             </tbody>
           </table>
         </div>
-      ) : !query.isError && <EmptyState title="Không tìm thấy món ăn" />}
-      <p className="text-xs leading-5 text-[color:var(--muted)]">Số suất còn lại được ước tính từ nguyên liệu khả dụng và định lượng công thức. Dấu “—” nghĩa là món chưa có công thức định lượng.</p>
+      ) : !query.isError && <EmptyState title="Không tìm thấy sản phẩm" />}
+      <p className="text-xs leading-5 text-[color:var(--muted)]">Số lượng còn lại được ước tính từ hàng trong kho khả dụng và định lượng định mức. Dấu “—” nghĩa là sản phẩm chưa có định mức định lượng.</p>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: canteenpn-api
+    name: glowbeauty-api
     runtime: docker
     plan: free
     region: singapore

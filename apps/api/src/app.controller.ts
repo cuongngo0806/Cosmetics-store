@@ -9,6 +9,6 @@ export class AppController {
   @Get('health')
   @ApiOperation({ summary: 'Kiểm tra trạng thái API' })
   health() {
-    return { status: 'ok', service: 'canteengo-api', storage: 'postgresql', realtime: 'redis' };
+    return { status: 'ok', service: 'glowbeauty-api', storage: 'postgresql', realtime: 'redis' };
   }
 }

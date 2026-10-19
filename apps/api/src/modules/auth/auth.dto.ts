@@ -1,20 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, Matches, MinLength } from 'class-validator';
+import { IsEmail, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
 
 export class RegisterStudentDto {
-  @ApiProperty({ example: '2373240001@hpn.edu.vn' })
-  @IsEmail({}, { message: 'Email trường không hợp lệ.' })
+  @ApiProperty({ example: 'Nguyễn Thị Lan' })
+  @IsString({ message: 'Vui lòng nhập họ tên.' })
+  @MinLength(2, { message: 'Vui lòng nhập họ tên.' })
+  @MaxLength(120, { message: 'Họ tên tối đa 120 ký tự.' })
+  fullName!: string;
+
+  @ApiProperty({ example: 'ban@example.com' })
+  @IsEmail({}, { message: 'Email không hợp lệ.' })
   email!: string;
 
-  @ApiProperty({ example: 'CanteenVWA@2026' })
+  @ApiProperty({ example: 'Glow@12345' })
   @IsString()
   @MinLength(8, { message: 'Mật khẩu phải có ít nhất 8 ký tự.' })
   @Matches(PASSWORD_PATTERN, { message: 'Mật khẩu cần có chữ hoa, chữ thường và chữ số.' })
   password!: string;
 
-  @ApiProperty({ example: 'CanteenVWA@2026' })
+  @ApiProperty({ example: 'Glow@12345' })
   @IsString()
   confirmPassword!: string;
 }

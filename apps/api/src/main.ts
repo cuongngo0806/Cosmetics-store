@@ -37,19 +37,19 @@ async function bootstrap() {
   }
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('CanteenPN API')
-    .setDescription('REST API cho hệ thống quản lý Căng tin Học viện Phụ nữ CanteenPN')
+    .setTitle('GlowBeauty API')
+    .setDescription('REST API cho hệ thống quản lý cửa hàng mĩ phẩm GlowBeauty')
     .setVersion('1.0')
     .addBearerAuth()
     .addCookieAuth('canteengo_refresh')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api/docs', app, document, { customSiteTitle: 'CanteenPN API Docs' });
+  SwaggerModule.setup('api/docs', app, document, { customSiteTitle: 'GlowBeauty API Docs' });
 
   app.enableShutdownHooks();
   const port = Number(process.env.PORT || 3001);
   await app.listen(port, '0.0.0.0');
-  Logger.log(`CanteenPN API đang chạy tại http://localhost:${port}/api`, 'Bootstrap');
+  Logger.log(`GlowBeauty API đang chạy tại http://localhost:${port}/api`, 'Bootstrap');
 }
 
 void bootstrap();

@@ -6,17 +6,17 @@ import {
   Bell, Boxes, CalendarDays, ClipboardList, Clock3,
   GraduationCap, LayoutDashboard, LogOut,
   Ticket, Users,
-  UtensilsCrossed, WalletCards,
+  Sparkles, WalletCards,
 } from 'lucide-react';
 import { apiRequest } from '@/lib/api';
 import { useAuthStore } from '@/lib/auth-store';
 import { ThemeToggle } from './theme-toggle';
 
-// Khu vực quản lý căng tin tham chiếu cấu trúc điều hướng của CanteenGoo.
+// Khu vực quản lý cửa hàng tham chiếu cấu trúc điều hướng của CanteenGoo.
 const ownerNav = [
   ['/admin', 'Tổng quan', LayoutDashboard],
   ['/admin/orders', 'Đơn hàng', ClipboardList],
-  ['/admin/menu', 'Thực đơn', UtensilsCrossed],
+  ['/admin/menu', 'Sản phẩm', Sparkles],
   ['/admin/inventory', 'Kho hàng', Boxes],
   ['/admin/vouchers', 'Voucher', Ticket],
   ['/admin/finance', 'Tài chính', WalletCards],
@@ -30,12 +30,12 @@ const nav = {
   ADMIN: ownerNav,
   CASHIER: [
     ['/cashier/orders', 'Đơn hàng', ClipboardList],
-    ['/cashier/menu', 'Thực đơn', UtensilsCrossed],
+    ['/cashier/menu', 'Sản phẩm', Sparkles],
     ['/cashier/attendance', 'Chấm công', Clock3],
   ],
   KITCHEN_STAFF: [
-    ['/kitchen/orders', 'Đơn bếp', ClipboardList],
-    ['/kitchen/menu', 'Thực đơn', UtensilsCrossed],
+    ['/kitchen/orders', 'Đơn đóng gói', ClipboardList],
+    ['/kitchen/menu', 'Sản phẩm', Sparkles],
     ['/kitchen/attendance', 'Chấm công', Clock3],
   ],
 } as const;
@@ -61,13 +61,13 @@ export function PortalShell({ role, title, children }: {
     <div className="min-h-screen bg-[#f4f7f6] dark:bg-[#0d1513] lg:grid lg:grid-cols-[238px_minmax(0,1fr)]">
       <aside className="border-r bg-[color:var(--surface)] lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
         <Link href={home} className="flex h-[78px] items-center gap-3 border-b px-5">
-          <span className="grid h-11 w-11 place-items-center rounded-[14px] bg-brand-600 text-sm font-extrabold text-white shadow-[0_8px_20px_rgba(8,127,91,.22)]">PN</span>
+          <span className="grid h-11 w-11 place-items-center rounded-[14px] bg-brand-600 text-sm font-extrabold text-white shadow-[0_8px_20px_rgba(190,24,93,.22)]">GB</span>
           <span>
-            <b className="block text-lg font-extrabold tracking-[-.04em]">Canteen<span className="text-brand-600">PN</span></b>
+            <b className="block text-lg font-extrabold tracking-[-.04em]">Glow<span className="text-brand-600">Beauty</span></b>
             <small className="text-[9px] font-bold uppercase tracking-wider text-[color:var(--muted)]">Campus operations</small>
           </span>
         </Link>
-        {role === 'ADMIN' && <p className="mx-4 mt-4 rounded-full bg-brand-50 px-3 py-1.5 text-center text-[10px] font-extrabold uppercase tracking-[.14em] text-brand-700 dark:bg-brand-900/30 dark:text-brand-100">Chủ căng tin</p>}
+        {role === 'ADMIN' && <p className="mx-4 mt-4 rounded-full bg-brand-50 px-3 py-1.5 text-center text-[10px] font-extrabold uppercase tracking-[.14em] text-brand-700 dark:bg-brand-900/30 dark:text-brand-100">Chủ cửa hàng</p>}
         <nav className="flex gap-2 overflow-x-auto p-3 lg:block lg:space-y-1 lg:overflow-visible" aria-label="Điều hướng nghiệp vụ">
           {links.map(([href, label, Icon]) => {
             const active = pathname === href || (href !== '/admin' && pathname.startsWith(`${href}/`));
@@ -83,7 +83,7 @@ export function PortalShell({ role, title, children }: {
       <div className="min-w-0">
         <header className="sticky top-0 z-30 flex min-h-[78px] items-center justify-between border-b bg-[color:var(--background)]/92 px-4 backdrop-blur-xl sm:px-8">
           <div>
-            <p className="text-[10px] font-extrabold uppercase tracking-[.16em] text-brand-600">{role === 'ADMIN' ? 'Quản lý căng tin' : role === 'CASHIER' ? 'Quầy thu ngân' : 'Khu vực bếp'}</p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[.16em] text-brand-600">{role === 'ADMIN' ? 'Quản lý cửa hàng' : role === 'CASHIER' ? 'Quầy thu ngân' : 'Khu vực kho'}</p>
             <h1 className="mt-1 text-2xl font-extrabold tracking-[-.035em]">{title}</h1>
           </div>
           <div className="flex items-center gap-2">

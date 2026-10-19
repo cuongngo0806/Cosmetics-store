@@ -24,5 +24,5 @@ export function estimateProductStock(recipes: StockRecipe[]) {
 
 export function productStockLabel(recipes: StockRecipe[]) {
   const stock = estimateProductStock(recipes);
-  return stock === null ? 'Chưa định lượng' : `${stock} suất`;
+  return stock === null ? 'Chưa định lượng' : `${stock} sản phẩm`;
 }
